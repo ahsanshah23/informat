@@ -9,6 +9,7 @@ using com.Informat.Services.Repository.SQL_Server;
 using com.Informat.WebAPI.Helper;
 using com.Informat.WebAPI.Models;
 using com.Informat.WebAPI.Repository;
+using com.Informat.WebAPI.Services;
 using Hangfire;
 using JWTAuthentication.WebApi.Contexts;
 using JWTAuthentication.WebApi.Models;
@@ -84,6 +85,9 @@ namespace JWTAuthentication.WebApi
             services.AddScoped<IRoleService, RoleService>();
 
             services.AddScoped(typeof(IEmailRepo), typeof(EmailRepo));
+
+            services.AddScoped<IInvitationService, InvitationService>();
+            services.AddScoped(typeof(IInvitationRepo), typeof(InvitationRepo));
 
             //Adding DB Context with MSSQL
             services.AddDbContext<ApplicationDbContext>(options =>

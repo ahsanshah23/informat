@@ -1,4 +1,5 @@
 ﻿using com.Informat.Services.Repository.SQL_Server;
+using com.Informat.WebAPI.Helper;
 using com.Informat.WebAPI.Models;
 using Dapper;
 using JWTAuthentication.WebApi.Constants;
@@ -18,6 +19,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace JWTAuthentication.WebApi.Services
@@ -28,19 +30,23 @@ namespace JWTAuthentication.WebApi.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly JWT _jwt;
+        private readonly IHelperMethods _helperMethods;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IOptions<JWT> jwt, ApplicationDbContext context)
+        public UserService(IHelperMethods helperMethods, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IOptions<JWT> jwt, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _helperMethods = helperMethods;
             _jwt = jwt.Value;
         }
         public async Task<ApplicationUser> RegisterAsync(RegisterModel model)
         {
+            var str = await _helperMethods.RandomString(2, true);
+            Random r = new Random();
             var user = new ApplicationUser
             {
-                UserName = model.Username,
+                UserName = Regex.Replace(model.FullName + r.Next(00, 99) + str, @"\s+", ""),
                 Email = model.Email,
                 FullName = model.FullName
             };

@@ -12,6 +12,5 @@ namespace JWTAuthentication.WebApi.Models
         public string email { get; set; }
         [Required]
         public string password { get; set; }
-        public string domain { get; set; }
     }
 }

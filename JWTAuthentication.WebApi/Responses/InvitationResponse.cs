@@ -10,7 +10,7 @@ namespace com.Informat.WebAPI.Repository
         public string CoupleName { get; set; }
         public string SecondCoupleName { get; set; }
         public string EventTitle { get; set; }
-        public TimeSpan EventTime { get; set; }
+        public string EventTime { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime EventDate { get; set; }

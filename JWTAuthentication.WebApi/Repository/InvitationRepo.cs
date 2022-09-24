@@ -11,7 +11,7 @@ namespace com.Informat.WebAPI.Repository
     public interface IInvitationRepo
     {
         Task<InvitationResponse> CreateInvitation(Invitation data);
-        Task<IEnumerable<string>> CreateInvitationAttachments(string invitationId, IEnumerable<string> attachments);
+        Task<IEnumerable<InvitationAttachment>> CreateInvitationAttachments(string invitationId, IEnumerable<InvitationAttachment> attachments);
     }
 
     public class InvitationRepo : IInvitationRepo
@@ -52,18 +52,18 @@ namespace com.Informat.WebAPI.Repository
             }
         }
 
-        public async Task<IEnumerable<string>> CreateInvitationAttachments(string invitationId, IEnumerable<string> attachments)
+        public async Task<IEnumerable<InvitationAttachment>> CreateInvitationAttachments(string invitationId, IEnumerable<InvitationAttachment> attachments)
         {
-            IEnumerable<string> entity = null;
+            IEnumerable<InvitationAttachment> entity = null;
             DynamicParameters p = new DynamicParameters();
             try
             {
                 p.Add("@InvitationId", invitationId);
                 foreach (var item in attachments)
                 {
-                    p.Add("@Attachment", item);
+                    p.Add("@Attachment", item.Attachment);
 
-                    entity = await _dbContext.Connection.QueryAsync<string>
+                    entity = await _dbContext.Connection.QueryAsync<InvitationAttachment>
                             ("Create_Invitation_Attachment", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
                 }
                 return entity;
