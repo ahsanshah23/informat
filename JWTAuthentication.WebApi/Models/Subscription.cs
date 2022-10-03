@@ -1,7 +1,14 @@
-﻿namespace com.Informat.WebAPI.Models
+﻿using System;
+
+namespace com.Informat.WebAPI.Models
 {
-    public class Subscription
+    public class SubscriptionCheck
     {
+        public bool IsValid { get; set; }
+        public int UserSubscriptionId { get; set; }
+        public int ConsumedCount { get; set; }
+        public int OriginalCount { get; set; }
+        public DateTime ExpiresOn { get; set; }
     }
 
     public class UserSubscription

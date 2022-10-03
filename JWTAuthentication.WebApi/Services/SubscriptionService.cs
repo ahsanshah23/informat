@@ -11,6 +11,7 @@ namespace com.Informat.WebAPI.Services
     public interface ISubscriptionService
     {
         Task<UserSubscriptionResponse> CreateUserSubscription(UserSubscription data);
+        Task<SubscriptionCheck> CheckUserSubsciption(string userId);
     }
 
     public class SubscriptionService : ISubscriptionService
@@ -25,6 +26,15 @@ namespace com.Informat.WebAPI.Services
         {
             var result = await _subscriptionRepo.CreateUserSubscription(data);
             
+            return result;
+        }
+
+        public async Task<SubscriptionCheck> CheckUserSubsciption(string userId)
+        {
+            var result = await _subscriptionRepo.CheckUserSubsciption(userId);
+            if (result != null)
+                result.IsValid = true;
+
             return result;
         }
     }

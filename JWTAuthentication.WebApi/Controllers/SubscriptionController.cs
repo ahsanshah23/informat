@@ -35,5 +35,24 @@ namespace com.Informat.WebAPI.Controllers
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpGet("check-subscription")]
+        public async Task<IActionResult> CheckSubscription(string userId)
+        {
+            try
+            {
+                var result = await _subscriptionService.CheckUserSubsciption(userId);
+                return Ok(new ApiResponse
+                {
+                    status_code = (int)HttpStatusCode.OK,
+                    Message = result != null ? "User subscription exists" : "No user subscription exists",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }

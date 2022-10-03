@@ -12,7 +12,7 @@ namespace com.Informat.WebAPI.Repository
 
     public interface ISubscriptionRepo
     {
-        
+        Task<SubscriptionCheck> CheckUserSubsciption(string userId);
         Task<UserSubscriptionResponse> CreateUserSubscription(UserSubscription data);
     }
 
@@ -35,6 +35,25 @@ namespace com.Informat.WebAPI.Repository
             {
                 var entity = await _dbContext.Connection.QuerySingleOrDefaultAsync<UserSubscriptionResponse>
                 ("Create_User_Subscription", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
+
+                return entity;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<SubscriptionCheck> CheckUserSubsciption(string userId)
+        {
+            var p = new DynamicParameters();
+            p.Add("@UserId", userId);
+            try
+            {
+                var entity = await _dbContext.Connection.QuerySingleOrDefaultAsync<SubscriptionCheck>
+                ("[Is_Exist_Subscription]", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
 
                 return entity;
 

@@ -86,8 +86,14 @@ namespace JWTAuthentication.WebApi
 
             services.AddScoped(typeof(IEmailRepo), typeof(EmailRepo));
 
+            services.AddScoped<ISongsService, SongsService>();
+            services.AddScoped(typeof(ISongsRepo), typeof(SongsRepo));
+
             services.AddScoped<IInvitationService, InvitationService>();
             services.AddScoped(typeof(IInvitationRepo), typeof(InvitationRepo));
+
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
+            services.AddScoped(typeof(ISubscriptionRepo), typeof(SubscriptionRepo));
 
             //Adding DB Context with MSSQL
             services.AddDbContext<ApplicationDbContext>(options =>
