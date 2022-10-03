@@ -14,6 +14,7 @@ namespace com.Informat.WebAPI.Services
     public interface IInvitationService
     {
         Task<InvitationResponse> CreateInvitation(Invitation data);
+        Task<InvitationResponse> GetInvitationById(string invitationId);
     }
 
     public class InvitationService : IInvitationService
@@ -49,7 +50,9 @@ namespace com.Informat.WebAPI.Services
                 EventDate = data.EventDate,
                 Location = data.Location,
                 ExpiryDate = data.ExpiryDate,
-                CreatedBy = data.CreatedBy,
+                UserId = data.UserId,
+                UserSubscriptionId = data.UserSubscriptionId,
+                SongId = data.SongId
             };
 
             var result = await _invitationRepo.CreateInvitation(invitation_req);
@@ -67,6 +70,34 @@ namespace com.Informat.WebAPI.Services
             await _invitationRepo.CreateInvitationAttachments(invitationId, data.Attachments);
 
             return result;
+        }
+
+        public async Task<InvitationResponse> GetInvitationById(string invitationId)
+        {
+            var data = await _invitationRepo.GetInvitationById(invitationId);
+            var attachments = await _invitationRepo.GetInvitationAttachments(invitationId);
+            foreach (var attachment in attachments)
+            {
+                //attachment = _imageUpload.ImageURL(attachment.Attachment);
+            }
+            InvitationResponse result = new InvitationResponse
+            {
+                Id = data.Id,
+                InvitationId = data.InvitationId,
+                CoupleName = data.CoupleName,
+                SecondCoupleName = data.SecondCoupleName,
+                EventTitle = data.EventTitle,
+                EventTime = data.EventTime,
+                Email = data.Email,
+                PhoneNumber = data.PhoneNumber,
+                EventDate = data.EventDate,
+                Location = data.Location,
+                ExpiryDate = data.ExpiryDate,
+                CreatedBy = data.CreatedBy,
+                //Attachments = attachments
+            };
+            return result;
+
         }
     }
 }

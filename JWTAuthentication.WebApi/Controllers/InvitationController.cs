@@ -35,5 +35,24 @@ namespace com.Informat.WebAPI.Controllers
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpGet("get-invitation-by-id")]
+        public async Task<IActionResult> GetInvitationById(string invitationId)
+        {
+            try
+            {
+                var result = await _invitationService.GetInvitationById(invitationId);
+                return Ok(new ApiResponse
+                {
+                    status_code = ((result != null) ? (int)HttpStatusCode.OK : (int)HttpStatusCode.BadRequest),
+                    Message = result != null ? " Leave Request loaded" : "failed",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }

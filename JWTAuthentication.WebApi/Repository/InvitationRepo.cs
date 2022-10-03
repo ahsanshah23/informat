@@ -4,12 +4,15 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace com.Informat.WebAPI.Repository
 {
     public interface IInvitationRepo
     {
+        Task<InvitationResponse> GetInvitationById(string invitationId);
+        Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId);
         Task<InvitationResponse> CreateInvitation(Invitation data);
         Task<IEnumerable<InvitationAttachment>> CreateInvitationAttachments(string invitationId, IEnumerable<InvitationAttachment> attachments);
     }
@@ -35,7 +38,9 @@ namespace com.Informat.WebAPI.Repository
             p.Add("@EventDate", data.EventDate);
             p.Add("@Location", data.Location);
             p.Add("@ExpiryDate", data.ExpiryDate);
-            p.Add("@CreatedBy", data.CreatedBy);
+            p.Add("@UserId", data.UserId);
+            p.Add("@UserSubscriptionId", data.UserSubscriptionId);
+            p.Add("@SongId", data.SongId);
 
             try
             {
@@ -67,6 +72,33 @@ namespace com.Informat.WebAPI.Repository
                             ("Create_Invitation_Attachment", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
                 }
                 return entity;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<InvitationResponse> GetInvitationById(string invitationId)
+        {
+            var p = new DynamicParameters();
+            p.Add("@InvitationId", invitationId);
+            var entity = await _dbContext.Connection.QuerySingleOrDefaultAsync<InvitationResponse>
+            ("Get_Invitation_By_Id", p, commandType: CommandType.StoredProcedure);
+
+            return entity;
+        }
+        public async Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId)
+        {
+            DynamicParameters p = new DynamicParameters();
+            p.Add("@InvitationId", invitationId);
+            try
+            {
+                var entities = await _dbContext.Connection.QueryAsync<InvitationResponse>
+                        ("Get_Invitation_Attachments", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
+
+                return entities;
             }
 
             catch (Exception ex)

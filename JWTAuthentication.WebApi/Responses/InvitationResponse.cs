@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using com.Informat.WebAPI.Models;
 
 namespace com.Informat.WebAPI.Repository
 {
@@ -17,6 +18,6 @@ namespace com.Informat.WebAPI.Repository
         public string Location { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string CreatedBy { get; set; }
-        public IEnumerable<string> Attachment { get; set; }
+        public IEnumerable<InvitationAttachment> Attachments { get; set; }
     }
 }
