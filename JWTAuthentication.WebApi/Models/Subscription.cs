@@ -8,6 +8,7 @@ namespace com.Informat.WebAPI.Models
         public int UserSubscriptionId { get; set; }
         public int ConsumedCount { get; set; }
         public int OriginalCount { get; set; }
+        public string Name { get; set; }
         public DateTime ExpiresOn { get; set; }
     }
 

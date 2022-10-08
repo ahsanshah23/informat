@@ -14,4 +14,16 @@ namespace com.Informat.WebAPI.Responses
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? ExpiresOn { get; set; }
     }
+
+    public class CheckSubscriptionResponseDto
+    {
+        public string Message { get; set; }
+        public bool IsValid { get; set; }
+        public int UserSubscriptionId { get; set; }
+        public string Name { get; set; }
+        public int ConsumedCount { get; set; }
+        public int OriginalCount { get; set; }
+        public DateTime ExpiresOn { get; set; }
+    }
+
 }

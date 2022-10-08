@@ -42,12 +42,7 @@ namespace com.Informat.WebAPI.Controllers
             try
             {
                 var result = await _subscriptionService.CheckUserSubsciption(userId);
-                return Ok(new ApiResponse
-                {
-                    status_code = (int)HttpStatusCode.OK,
-                    Message = result != null ? "User subscription exists" : "No user subscription exists",
-                    data = result
-                });
+                return Ok(result);
             }
             catch (Exception ex)
             {

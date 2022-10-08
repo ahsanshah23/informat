@@ -11,7 +11,7 @@ namespace com.Informat.WebAPI.Services
     public interface ISubscriptionService
     {
         Task<UserSubscriptionResponse> CreateUserSubscription(UserSubscription data);
-        Task<SubscriptionCheck> CheckUserSubsciption(string userId);
+        Task<CheckSubscriptionResponseDto> CheckUserSubsciption(string userId);
     }
 
     public class SubscriptionService : ISubscriptionService
@@ -29,13 +29,43 @@ namespace com.Informat.WebAPI.Services
             return result;
         }
 
-        public async Task<SubscriptionCheck> CheckUserSubsciption(string userId)
+        public async Task<CheckSubscriptionResponseDto> CheckUserSubsciption(string userId)
         {
+            var initialResponseModel = new CheckSubscriptionResponseDto();
             var result = await _subscriptionRepo.CheckUserSubsciption(userId);
-            if (result != null)
-                result.IsValid = true;
-
-            return result;
+            if (result == null)
+            {
+                initialResponseModel.Message = "No Subscription exists against this user";
+                return initialResponseModel;
+            }
+            else if (DateTime.Today >= result.ExpiresOn)
+            {
+                initialResponseModel.Message = "Subscription Expired";
+                initialResponseModel.ExpiresOn = result.ExpiresOn;
+                initialResponseModel.ConsumedCount = result.ConsumedCount;
+                initialResponseModel.OriginalCount = result.OriginalCount;
+                initialResponseModel.Name = result.Name;
+                return initialResponseModel;
+            }
+            else if (result.ConsumedCount >= result.OriginalCount)
+            {
+                initialResponseModel.Message = "Subscription Fully Consumed";
+                initialResponseModel.ExpiresOn = result.ExpiresOn;
+                initialResponseModel.ConsumedCount = result.ConsumedCount;
+                initialResponseModel.OriginalCount = result.OriginalCount;
+                initialResponseModel.Name = result.Name;
+                return initialResponseModel;
+            }
+            else
+            {
+                initialResponseModel.Message = "Subscription Exists";
+                initialResponseModel.IsValid = true;
+                initialResponseModel.ExpiresOn = result.ExpiresOn;
+                initialResponseModel.ConsumedCount = result.ConsumedCount;
+                initialResponseModel.OriginalCount = result.OriginalCount;
+                initialResponseModel.Name = result.Name;
+                return initialResponseModel;
+            }
         }
     }
 }
