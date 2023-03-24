@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,5 +30,14 @@ namespace com.Informat.WebAPI.Models
     {
         public string InvitationId { get; set; }
         public string Attachment { get; set; }
+    }
+
+    public class RSVP
+    {
+        public string RSVPId { get; set;}
+        public string EventId { get; set; }
+        public string Names { get; set; }
+        public bool IsAttending { get; set; }
+        public int NoOfAttendies { get; set; }
     }
 }

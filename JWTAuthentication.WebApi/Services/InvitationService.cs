@@ -13,6 +13,7 @@ namespace com.Informat.WebAPI.Services
 {
     public interface IInvitationService
     {
+        Task<bool> AddRSVP(RSVP data);
         Task<InvitationResponse> CreateInvitation(Invitation data);
         Task<InvitationResponse> GetInvitationById(string invitationId);
     }
@@ -31,6 +32,16 @@ namespace com.Informat.WebAPI.Services
             _helperMethods = helperMethods;
             _configuration = configuration.Value;
             _imageUpload = imageUpload;
+        }
+
+        public async Task<bool> AddRSVP(RSVP data)
+        {
+            data.RSVPId = Guid.NewGuid().ToString();
+
+            var result = await _invitationRepo.AddRSVP(data);
+            
+
+            return result;
         }
 
 

@@ -54,5 +54,24 @@ namespace com.Informat.WebAPI.Controllers
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpPost("create-rsvp")]
+        public async Task<IActionResult> AddRSVP(RSVP data)
+        {
+            try
+            {
+                var result = await _invitationService.AddRSVP(data);
+                return Ok(new ApiResponse
+                {
+                    status_code = ((result != null) ? (int)HttpStatusCode.OK : (int)HttpStatusCode.BadRequest),
+                    Message = result != null ? "RSVP added" : "failed",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
     }
 }

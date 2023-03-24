@@ -13,6 +13,7 @@ namespace com.Informat.WebAPI.Repository
     {
         Task<InvitationResponse> GetInvitationById(string invitationId);
         Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId);
+        Task<bool> AddRSVP(RSVP data);
         Task<InvitationResponse> CreateInvitation(Invitation data);
         Task<IEnumerable<InvitationAttachment>> CreateInvitationAttachments(string invitationId, IEnumerable<InvitationAttachment> attachments);
     }
@@ -24,6 +25,31 @@ namespace com.Informat.WebAPI.Repository
         {
             _dbContext = dbContext;
         }
+
+        public async Task<bool> AddRSVP(RSVP data)
+        {
+            var p = new DynamicParameters();
+            p.Add("@Id", data.RSVPId);
+            p.Add("@Names", data.Names);
+            p.Add("@IsAttending", data.IsAttending);
+            p.Add("@NoOfAttendies", data.NoOfAttendies);
+            p.Add("@EventId", data.EventId);
+
+            try
+            {
+                var entity = await _dbContext.Connection.QuerySingleOrDefaultAsync<InvitationResponse>
+                ("AddRSVP", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
 
         public async Task<InvitationResponse> CreateInvitation(Invitation data)
         {
