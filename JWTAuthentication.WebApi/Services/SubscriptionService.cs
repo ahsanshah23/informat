@@ -33,6 +33,7 @@ namespace com.Informat.WebAPI.Services
         {
             var initialResponseModel = new CheckSubscriptionResponseDto();
             var result = await _subscriptionRepo.CheckUserSubsciption(userId);
+            initialResponseModel.UserSubscriptionId = result.UserSubscriptionId;
             if (result == null)
             {
                 initialResponseModel.Message = "No Subscription exists against this user";

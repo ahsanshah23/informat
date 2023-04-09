@@ -55,6 +55,45 @@ namespace com.Informat.WebAPI.Controllers
             }
         }
 
+
+        [HttpGet("get-events-by-user")]
+        public async Task<IActionResult> GetEvents(string userId)
+        {
+            try
+            {
+                var result = await _invitationService.GetEvent(userId);
+                return Ok(new ApiResponse
+                {
+                    status_code = ((result != null) ? (int)HttpStatusCode.OK : (int)HttpStatusCode.BadRequest),
+                    Message = result != null ? "Event Details" : "failed",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        [HttpGet("get-rsvp-by-event")]
+        public async Task<IActionResult> GetRSVP(string eventId)
+        {
+            try
+            {
+                var result = await _invitationService.GetRSVP(eventId);
+                return Ok(new ApiResponse
+                {
+                    status_code = ((result != null) ? (int)HttpStatusCode.OK : (int)HttpStatusCode.BadRequest),
+                    Message = result != null ? "RSVP Details" : "failed",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
         [HttpPost("create-rsvp")]
         public async Task<IActionResult> AddRSVP(RSVP data)
         {

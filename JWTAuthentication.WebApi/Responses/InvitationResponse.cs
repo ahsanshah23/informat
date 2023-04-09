@@ -20,4 +20,12 @@ namespace com.Informat.WebAPI.Repository
         public string CreatedBy { get; set; }
         public IEnumerable<InvitationAttachment> Attachments { get; set; }
     }
+
+    public class RSVPResponse
+    {
+        public string Names { get; set; }
+        public string IsAttending{ get; set; }
+        public int NoOfAttendees{ get; set; }
+    }
+
 }

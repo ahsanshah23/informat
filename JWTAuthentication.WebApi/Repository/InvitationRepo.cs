@@ -14,6 +14,8 @@ namespace com.Informat.WebAPI.Repository
         Task<InvitationResponse> GetInvitationById(string invitationId);
         Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId);
         Task<bool> AddRSVP(RSVP data);
+        Task<IEnumerable<RSVPResponse>> GetRSVP(string eventId);
+        Task<IEnumerable<InvitationResponse>> GetEvent(string userId);
         Task<InvitationResponse> CreateInvitation(Invitation data);
         Task<IEnumerable<InvitationAttachment>> CreateInvitationAttachments(string invitationId, IEnumerable<InvitationAttachment> attachments);
     }
@@ -24,6 +26,26 @@ namespace com.Informat.WebAPI.Repository
         public InvitationRepo(IDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<IEnumerable<InvitationResponse>> GetEvent(string userId)
+        {
+            var p = new DynamicParameters();
+            p.Add("@UserId", userId);
+            var entity = await _dbContext.Connection.QueryAsync<InvitationResponse>
+            ("EventByUser", p, commandType: CommandType.StoredProcedure);
+
+            return entity;
+        }
+
+        public async Task<IEnumerable<RSVPResponse>> GetRSVP(string eventId)
+        {
+            var p = new DynamicParameters();
+            p.Add("@EventId", eventId);
+            var entity = await _dbContext.Connection.QueryAsync<RSVPResponse>
+            ("RSVPbyEvent", p, commandType: CommandType.StoredProcedure);
+
+            return entity;
         }
 
         public async Task<bool> AddRSVP(RSVP data)

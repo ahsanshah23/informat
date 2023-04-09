@@ -37,7 +37,7 @@ namespace com.Informat.WebAPI.Models
         public string RSVPId { get; set;}
         public string EventId { get; set; }
         public string Names { get; set; }
-        public bool IsAttending { get; set; }
+        public string IsAttending { get; set; }
         public int NoOfAttendies { get; set; }
     }
 }

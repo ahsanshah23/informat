@@ -14,6 +14,8 @@ namespace com.Informat.WebAPI.Services
     public interface IInvitationService
     {
         Task<bool> AddRSVP(RSVP data);
+        Task<IEnumerable<RSVPResponse>> GetRSVP(string eventId);
+        Task<IEnumerable<InvitationResponse>> GetEvent(string userId);
         Task<InvitationResponse> CreateInvitation(Invitation data);
         Task<InvitationResponse> GetInvitationById(string invitationId);
     }
@@ -34,12 +36,32 @@ namespace com.Informat.WebAPI.Services
             _imageUpload = imageUpload;
         }
 
+        public async Task<IEnumerable<InvitationResponse>> GetEvent(string userId)
+        {
+
+            var result = await _invitationRepo.GetEvent(userId);
+
+
+            return result;
+        }
+
+
+        public async Task<IEnumerable<RSVPResponse>> GetRSVP(string eventId)
+        {
+           
+            var result = await _invitationRepo.GetRSVP(eventId);
+            
+
+            return result;
+        }
+
+
         public async Task<bool> AddRSVP(RSVP data)
         {
             data.RSVPId = Guid.NewGuid().ToString();
 
             var result = await _invitationRepo.AddRSVP(data);
-            
+
 
             return result;
         }
