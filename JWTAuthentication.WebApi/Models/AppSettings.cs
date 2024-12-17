@@ -21,6 +21,7 @@ namespace com.Informat.WebAPI.Models
         public string BaseUrl { get; set; }
         public string WebUrl { get; set; }
         public string UploadsFolder { get; set; }
+        public string UploadsFolderUpload { get; set; }
         public string DefaultUserImage { get; set; }
         public string DefaultCompanyLogo { get; set; }
         

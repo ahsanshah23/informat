@@ -33,7 +33,7 @@ namespace com.Informat.WebAPI.Services
         {
             var initialResponseModel = new CheckSubscriptionResponseDto();
             var result = await _subscriptionRepo.CheckUserSubsciption(userId);
-            initialResponseModel.UserSubscriptionId = result.UserSubscriptionId;
+            
             if (result == null)
             {
                 initialResponseModel.Message = "No Subscription exists against this user";
@@ -41,6 +41,7 @@ namespace com.Informat.WebAPI.Services
             }
             else if (DateTime.Today >= result.ExpiresOn)
             {
+                initialResponseModel.UserSubscriptionId = result.UserSubscriptionId;
                 initialResponseModel.Message = "Subscription Expired";
                 initialResponseModel.ExpiresOn = result.ExpiresOn;
                 initialResponseModel.ConsumedCount = result.ConsumedCount;
@@ -50,6 +51,7 @@ namespace com.Informat.WebAPI.Services
             }
             else if (result.ConsumedCount >= result.OriginalCount)
             {
+                initialResponseModel.UserSubscriptionId = result.UserSubscriptionId;
                 initialResponseModel.Message = "Subscription Fully Consumed";
                 initialResponseModel.ExpiresOn = result.ExpiresOn;
                 initialResponseModel.ConsumedCount = result.ConsumedCount;
@@ -59,6 +61,7 @@ namespace com.Informat.WebAPI.Services
             }
             else
             {
+                initialResponseModel.UserSubscriptionId = result.UserSubscriptionId;
                 initialResponseModel.Message = "Subscription Exists";
                 initialResponseModel.IsValid = true;
                 initialResponseModel.ExpiresOn = result.ExpiresOn;

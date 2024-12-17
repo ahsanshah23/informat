@@ -18,6 +18,9 @@ namespace com.Informat.WebAPI.Repository
         public string Location { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string CreatedBy { get; set; }
+        public string LocationURL { get; set; }
+        public string EventDesc { get; set; }
+        public string Song { get; set; }
         public IEnumerable<InvitationAttachment> Attachments { get; set; }
     }
 

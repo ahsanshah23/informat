@@ -12,7 +12,7 @@ namespace com.Informat.WebAPI.Repository
     public interface IInvitationRepo
     {
         Task<InvitationResponse> GetInvitationById(string invitationId);
-        Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId);
+        Task<IEnumerable<InvitationAttachment>> GetInvitationAttachments(string invitationId);
         Task<bool> AddRSVP(RSVP data);
         Task<IEnumerable<RSVPResponse>> GetRSVP(string eventId);
         Task<IEnumerable<InvitationResponse>> GetEvent(string userId);
@@ -89,6 +89,8 @@ namespace com.Informat.WebAPI.Repository
             p.Add("@UserId", data.UserId);
             p.Add("@UserSubscriptionId", data.UserSubscriptionId);
             p.Add("@SongId", data.SongId);
+            p.Add("@LocationURL", data.LocationURL);
+            p.Add("@EventDesc", data.EventDesc);
 
             try
             {
@@ -137,13 +139,13 @@ namespace com.Informat.WebAPI.Repository
 
             return entity;
         }
-        public async Task<IEnumerable<InvitationResponse>> GetInvitationAttachments(string invitationId)
+        public async Task<IEnumerable<InvitationAttachment>> GetInvitationAttachments(string invitationId)
         {
             DynamicParameters p = new DynamicParameters();
             p.Add("@InvitationId", invitationId);
             try
             {
-                var entities = await _dbContext.Connection.QueryAsync<InvitationResponse>
+                var entities = await _dbContext.Connection.QueryAsync<InvitationAttachment>
                         ("Get_Invitation_Attachments", p, commandType: CommandType.StoredProcedure, transaction: _dbContext.Transaction);
 
                 return entities;

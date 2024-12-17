@@ -23,6 +23,8 @@ namespace com.Informat.WebAPI.Models
         public string UserId { get; set; }
         public int UserSubscriptionId { get; set; }
         public int SongId { get; set; }
+        public string LocationURL { get; set; }
+        public string EventDesc { get; set; }
         public IEnumerable<InvitationAttachment> Attachments { get; set; }
     }
 

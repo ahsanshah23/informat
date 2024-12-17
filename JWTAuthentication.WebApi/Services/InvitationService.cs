@@ -85,22 +85,29 @@ namespace com.Informat.WebAPI.Services
                 ExpiryDate = data.ExpiryDate,
                 UserId = data.UserId,
                 UserSubscriptionId = data.UserSubscriptionId,
-                SongId = data.SongId
+                SongId = data.SongId,
+                LocationURL= data.LocationURL,
+                EventDesc= data.EventDesc
             };
 
             var result = await _invitationRepo.CreateInvitation(invitation_req);
-            foreach (var attach in data.Attachments)
+            if (data.Attachments != null)
             {
-                string attachment = "";
-                string path = Path.Combine(this.Environment.WebRootPath, _configuration.UploadsFolder);
-                if (!string.IsNullOrEmpty(attach.Attachment))
+                foreach (var attach in data.Attachments)
                 {
-                    attachment = Guid.NewGuid().ToString() + ".png";
-                    _imageUpload.SaveImage(path, attach.Attachment, attachment);
-                    attach.Attachment = attachment;
+                    string attachment = "";
+                    string path = Path.Combine(this.Environment.WebRootPath, _configuration.UploadsFolderUpload);
+                    if (!string.IsNullOrEmpty(attach.Attachment))
+                    {
+                        attachment = Guid.NewGuid().ToString() + ".png";
+                        _imageUpload.SaveImage(path, attach.Attachment, attachment);
+                        attach.Attachment = attachment;
+                    }
                 }
+                await _invitationRepo.CreateInvitationAttachments(invitationId, data.Attachments);
             }
-            await _invitationRepo.CreateInvitationAttachments(invitationId, data.Attachments);
+            
+            
 
             return result;
         }
@@ -111,25 +118,39 @@ namespace com.Informat.WebAPI.Services
             var attachments = await _invitationRepo.GetInvitationAttachments(invitationId);
             foreach (var attachment in attachments)
             {
-                //attachment = _imageUpload.ImageURL(attachment.Attachment);
+                attachment.Attachment = _imageUpload.ImageURL(attachment.Attachment);
             }
-            InvitationResponse result = new InvitationResponse
+            if (data != null)
             {
-                Id = data.Id,
-                InvitationId = data.InvitationId,
-                CoupleName = data.CoupleName,
-                SecondCoupleName = data.SecondCoupleName,
-                EventTitle = data.EventTitle,
-                EventTime = data.EventTime,
-                Email = data.Email,
-                PhoneNumber = data.PhoneNumber,
-                EventDate = data.EventDate,
-                Location = data.Location,
-                ExpiryDate = data.ExpiryDate,
-                CreatedBy = data.CreatedBy,
-                //Attachments = attachments
-            };
-            return result;
+                InvitationResponse result = new InvitationResponse
+                {
+                    Id = data.Id,
+                    InvitationId = data.InvitationId,
+                    CoupleName = data.CoupleName,
+                    SecondCoupleName = data.SecondCoupleName,
+                    EventTitle = data.EventTitle,
+                    EventTime = data.EventTime,
+                    Email = data.Email,
+                    PhoneNumber = data.PhoneNumber,
+                    EventDate = data.EventDate,
+                    Location = data.Location,
+                    ExpiryDate = data.ExpiryDate,
+                    CreatedBy = data.CreatedBy,
+                    LocationURL = data.LocationURL,
+                    EventDesc = data.EventDesc,
+                    Song = data.Song,
+                    Attachments = attachments
+                };
+                return result;
+
+            }
+            else
+            {
+                InvitationResponse result = new InvitationResponse();
+                return result;
+            }
+            
+            
 
         }
     }
